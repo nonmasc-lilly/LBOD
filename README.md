@@ -1,4 +1,10 @@
+# LBOD
+### Legacy Bios Operating system Development language
+#### @Lilly Tau
 
+LBOD is a programming language designed to streamline the process of creating a
+sixteen bit real mode operating system. It will compile directly to 8086 assembly.
+What follows is the ABNF description of LBOD.
 
 
 ```
@@ -49,6 +55,46 @@ forever = "forever" *FWSP "(" *FWSP *((statement / asm) *FWSP) ")"
 call = "call" *FWSP iden *FWSP "(" *FWSP [(dereference / ilit / iden / register) *FWSP *("," *FWSP (dereference / ilit / iden / register) *FWSP)] ")"
 ```
 
+finally here is a hello world program and its equivalent assembly code:
 
+(using javascript highlighting)
+
+```js
+var bytes MSG : "Hello, world!", $D, $A, $0
+
+function main [0] (
+    = si MSG
+    = ah $0E
+    loop al = 0 (
+        = al [si]
+        int $10
+        inc si
+    )
+    asm """jmp $"""
+)
+
+asm """times 510-($-$$) db 0x00"""
+var words MAGIC : $AA55
+```
+
+```x86asm
+MSG: "Hello, world!", $D, $A, $0
+
+main:
+    mov si, MSG
+    mov ah, 0xE
+.L0:
+    mov al, [si]
+    int 0x10
+    inc si
+    cmp al, 0
+    jne .L0
+.EL0:
+    jmp $
+
+times 510-($-$$) db 0x00
+
+MAGIC: dw 0xAA55
+```
 
 
