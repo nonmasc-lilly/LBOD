@@ -78,7 +78,7 @@ var words MAGIC : $AA55
 ```
 
 ```asm
-MSG: "Hello, world!", $D, $A, $0
+MSG: "Hello, world!", 0xD, 0xA, 0x0
 
 main:
     mov si, MSG
@@ -87,7 +87,7 @@ main:
     mov al, [si]
     int 0x10
     inc si
-    cmp al, 0
+    cmp al, 0x0
     jne .L0
 .EL0:
     jmp $
