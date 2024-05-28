@@ -6,7 +6,7 @@ if(${CMAKE_VERSION} VERSION_LESS 3.12)
 endif()
 
 project(LBOD VERSION 1.0
-    DESCRIPTION "Lilly's Basic Operating system Developement language"
+    DESCRIPTION "Legacy Bios Operating system Development language"
     LANGUAGES C)
 
 add_executable(lbodc src/main.c src/lex.c src/parse.c src/compile.c src/inc/main.h)
