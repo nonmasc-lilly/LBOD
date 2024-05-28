@@ -77,7 +77,7 @@ asm """times 510-($-$$) db 0x00"""
 var words MAGIC : $AA55
 ```
 
-```x86asm
+```asm
 MSG: "Hello, world!", $D, $A, $0
 
 main:
