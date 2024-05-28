@@ -38,7 +38,7 @@ static const char *token_type_rep[] = {
     "match",        ";",            "loop",         /*    ;    */
     "forever",      "[",            "]",            /*    [ ]  */
     "than",         "to",           ",",            /*      ,  */
-    "xor"                                           /*  ^*/
+    "xor",          "return"                        /*  ^      */
 };
 
 enum token_type {
@@ -63,7 +63,7 @@ enum token_type {
     TT_match,       TT_semicolon,   TT_loop,
     TT_forever,     TT_obracket,    TT_cbracket,
     TT_than,        TT_to,          TT_comma,
-    TT_xor
+    TT_xor,         TT_return,
 };
 
 enum value_type {
@@ -97,10 +97,82 @@ void *alloc_token_value_from_string(const char *str);
 struct lex_node *lex_string(const char *string);
 
 
+enum error_level {
+    EL_info, EL_warning, EL_error
+};
+
+enum parse_class {
+    PC_program,             PC_string,      PC_iden,
+    PC_primary_statement,   PC_declaration, PC_literal,
+    PC_ilit,                PC_type,        PC_asm,
+    PC_function,            PC_statement,   PC_save,
+    PC_register,            PC_exregister,  PC_load,
+    PC_interrupt,           PC_move,        PC_add,
+    PC_subtract,            PC_divide,      PC_multiply,
+    PC_dereference,         PC_compare,     PC_comparison,
+    PC_or,                  PC_xor,         PC_and,
+    PC_negate,              PC_flip,        PC_increment,
+    PC_match,               PC_loop,        PC_forever,
+    PC_call,                PC_return
+};
+
+struct parse_node {
+    unsigned int pid;
+    enum parse_class type;
+    unsigned int children_len;
+    union value value;
+    struct parse_node *parent, **children;
+};
+
+#define THROW(str, token) do {\
+        report(EL_error, (str));\
+        if(token) printf("at:\n\tline: %u\n\tbyte: %u\n", ((struct lex_node*)(token))->line,\
+            ((struct lex_node*)(token))->ch);\
+        exit(0);\
+    } while(0)
+#define ASSERT(condition, str, token) if(!(condition)) THROW((str), (token))
+void report(enum error_level level, const char *string);
+enum value_type parse_class_value_type(enum parse_class type);
+struct parse_node *create_parse_node(enum parse_class type, const void *value);
+void destroy_parse_node(struct parse_node *parse_node);
+void parse_node_add_child(struct parse_node *parent, struct parse_node *child);
 
 
-
-
+struct parse_node *parse_string(struct lex_node **current);             /* done */
+struct parse_node *parse_iden(struct lex_node **current);               /* done */
+struct parse_node *parse_int_literal(struct lex_node **current);        /* done */
+struct parse_node *parse_literal(struct lex_node **current);            /* done */
+struct parse_node *parse_dereference(struct lex_node **current);        /* done */
+struct parse_node *parse_type(struct lex_node **current);               /* done */
+struct parse_node *parse_register(struct lex_node **current);           /* done */
+struct parse_node *parse_exregister(struct lex_node **current);         /* done */
+struct parse_node *parse_save(struct lex_node **current);               /*      */
+struct parse_node *parse_load(struct lex_node **current);               /*      */
+struct parse_node *parse_interrupt(struct lex_node **current);          /*      */
+struct parse_node *parse_move(struct lex_node **current);               /*      */
+struct parse_node *parse_add(struct lex_node **current);                /*      */
+struct parse_node *parse_subtract(struct lex_node **current);           /*      */
+struct parse_node *parse_multiply(struct lex_node **current);           /*      */
+struct parse_node *parse_divide(struct lex_node **current);             /*      */
+struct parse_node *parse_or(struct lex_node **current);                 /*      */
+struct parse_node *parse_xor(struct lex_node **current);                /*      */
+struct parse_node *parse_and(struct lex_node **current);                /*      */
+struct parse_node *parse_negate(struct lex_node **current);             /*      */
+struct parse_node *parse_flip(struct lex_node **current);               /*      */
+struct parse_node *parse_increment(struct lex_node **current);          /*      */
+struct parse_node *parse_return(struct lex_node **current);             /*      */
+struct parse_node *parse_call(struct lex_node **current);               /*      */
+struct parse_node *parse_match(struct lex_node **current);              /*      */
+struct parse_node *parse_comparison(struct lex_node **current);         /*      */
+struct parse_node *parse_compare(struct lex_node **current);            /*      */
+struct parse_node *parse_loop(struct lex_node **current);               /*      */
+struct parse_node *parse_forever(struct lex_node **current);            /*      */
+struct parse_node *parse_statement(struct lex_node **current);          /*      */
+struct parse_node *parse_asm(struct lex_node **current);                /* done */
+struct parse_node *parse_function(struct lex_node **current);           /* done */
+struct parse_node *parse_declaration(struct lex_node **current);        /* done */
+struct parse_node *parse_primary_statement(struct lex_node **current);  /* done */
+struct parse_node *parse_program(struct lex_node *tokens);              /* done */
 
 
 

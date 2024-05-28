@@ -14,7 +14,7 @@ string = DQUOTE *(VCHAR / SP) DQUOTE
 iden   = *VCHAR
 primary_statement = declaration / function / asm
 declaration = ("const" iden ":" ilit) / ("var" type iden ":" literal)
-literal = ilit / (string ["," literal])
+literal = ilit / string / (literal "," literal)
 ilit = decimal / hex / binary / octal
 decimal = 1*DIGIT
 hex = "$" 1*HEXDIGIT
@@ -23,9 +23,9 @@ octal = "o" 1*(%x30-37)
 type = "bytes" / "words" / "doubles" / "quads"
 asm = "asm 3*3DQUOTE *OCTET 3*3DQUOTE
 function = "function" 1*FWSP iden *FWSP "[" *FWSP %x30-37 *FWSP "]" *FWSP
-    "(" *FWSP *((statement / asm) *FWSP) return *FWSP ")"
+    "(" *FWSP *((statement / asm) *FWSP) ")"
 statement = save / load / interrupt / move / add / subtract / multiply / divide / compare / match / or / and /
-    negate / flip / increment / loop / forever / "break" / "continue" / call / xor
+    negate / flip / increment / loop / forever / "break" / "continue" / call / xor / "return"
 save = "save (" register *FWSP *6("," *FWSP register *FWSP) ")"
 register = "ax" / "bx" / "cx" / "dx" / "si" / "di" / "bp"
 exregister = "ah" / "al" / "bh" / "bl" / "ch" / "cl" / "dh" / "dl"

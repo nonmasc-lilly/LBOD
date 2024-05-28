@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/lilly/ProgPort/LBOD
+CMAKE_SOURCE_DIR = /home/lilly/ProgPort/LBOD/LBOD
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/lilly/ProgPort/LBOD/build
+CMAKE_BINARY_DIR = /home/lilly/ProgPort/LBOD/LBOD/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/lbodc.dir/depend.make
@@ -70,60 +70,60 @@ include CMakeFiles/lbodc.dir/progress.make
 include CMakeFiles/lbodc.dir/flags.make
 
 CMakeFiles/lbodc.dir/src/main.c.o: CMakeFiles/lbodc.dir/flags.make
-CMakeFiles/lbodc.dir/src/main.c.o: /home/lilly/ProgPort/LBOD/src/main.c
+CMakeFiles/lbodc.dir/src/main.c.o: /home/lilly/ProgPort/LBOD/LBOD/src/main.c
 CMakeFiles/lbodc.dir/src/main.c.o: CMakeFiles/lbodc.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/lilly/ProgPort/LBOD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/lbodc.dir/src/main.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/lbodc.dir/src/main.c.o -MF CMakeFiles/lbodc.dir/src/main.c.o.d -o CMakeFiles/lbodc.dir/src/main.c.o -c /home/lilly/ProgPort/LBOD/src/main.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/lilly/ProgPort/LBOD/LBOD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/lbodc.dir/src/main.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/lbodc.dir/src/main.c.o -MF CMakeFiles/lbodc.dir/src/main.c.o.d -o CMakeFiles/lbodc.dir/src/main.c.o -c /home/lilly/ProgPort/LBOD/LBOD/src/main.c
 
 CMakeFiles/lbodc.dir/src/main.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/lbodc.dir/src/main.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/lilly/ProgPort/LBOD/src/main.c > CMakeFiles/lbodc.dir/src/main.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/lilly/ProgPort/LBOD/LBOD/src/main.c > CMakeFiles/lbodc.dir/src/main.c.i
 
 CMakeFiles/lbodc.dir/src/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/lbodc.dir/src/main.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/lilly/ProgPort/LBOD/src/main.c -o CMakeFiles/lbodc.dir/src/main.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/lilly/ProgPort/LBOD/LBOD/src/main.c -o CMakeFiles/lbodc.dir/src/main.c.s
 
 CMakeFiles/lbodc.dir/src/lex.c.o: CMakeFiles/lbodc.dir/flags.make
-CMakeFiles/lbodc.dir/src/lex.c.o: /home/lilly/ProgPort/LBOD/src/lex.c
+CMakeFiles/lbodc.dir/src/lex.c.o: /home/lilly/ProgPort/LBOD/LBOD/src/lex.c
 CMakeFiles/lbodc.dir/src/lex.c.o: CMakeFiles/lbodc.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/lilly/ProgPort/LBOD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/lbodc.dir/src/lex.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/lbodc.dir/src/lex.c.o -MF CMakeFiles/lbodc.dir/src/lex.c.o.d -o CMakeFiles/lbodc.dir/src/lex.c.o -c /home/lilly/ProgPort/LBOD/src/lex.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/lilly/ProgPort/LBOD/LBOD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/lbodc.dir/src/lex.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/lbodc.dir/src/lex.c.o -MF CMakeFiles/lbodc.dir/src/lex.c.o.d -o CMakeFiles/lbodc.dir/src/lex.c.o -c /home/lilly/ProgPort/LBOD/LBOD/src/lex.c
 
 CMakeFiles/lbodc.dir/src/lex.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/lbodc.dir/src/lex.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/lilly/ProgPort/LBOD/src/lex.c > CMakeFiles/lbodc.dir/src/lex.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/lilly/ProgPort/LBOD/LBOD/src/lex.c > CMakeFiles/lbodc.dir/src/lex.c.i
 
 CMakeFiles/lbodc.dir/src/lex.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/lbodc.dir/src/lex.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/lilly/ProgPort/LBOD/src/lex.c -o CMakeFiles/lbodc.dir/src/lex.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/lilly/ProgPort/LBOD/LBOD/src/lex.c -o CMakeFiles/lbodc.dir/src/lex.c.s
 
 CMakeFiles/lbodc.dir/src/parse.c.o: CMakeFiles/lbodc.dir/flags.make
-CMakeFiles/lbodc.dir/src/parse.c.o: /home/lilly/ProgPort/LBOD/src/parse.c
+CMakeFiles/lbodc.dir/src/parse.c.o: /home/lilly/ProgPort/LBOD/LBOD/src/parse.c
 CMakeFiles/lbodc.dir/src/parse.c.o: CMakeFiles/lbodc.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/lilly/ProgPort/LBOD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/lbodc.dir/src/parse.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/lbodc.dir/src/parse.c.o -MF CMakeFiles/lbodc.dir/src/parse.c.o.d -o CMakeFiles/lbodc.dir/src/parse.c.o -c /home/lilly/ProgPort/LBOD/src/parse.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/lilly/ProgPort/LBOD/LBOD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/lbodc.dir/src/parse.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/lbodc.dir/src/parse.c.o -MF CMakeFiles/lbodc.dir/src/parse.c.o.d -o CMakeFiles/lbodc.dir/src/parse.c.o -c /home/lilly/ProgPort/LBOD/LBOD/src/parse.c
 
 CMakeFiles/lbodc.dir/src/parse.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/lbodc.dir/src/parse.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/lilly/ProgPort/LBOD/src/parse.c > CMakeFiles/lbodc.dir/src/parse.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/lilly/ProgPort/LBOD/LBOD/src/parse.c > CMakeFiles/lbodc.dir/src/parse.c.i
 
 CMakeFiles/lbodc.dir/src/parse.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/lbodc.dir/src/parse.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/lilly/ProgPort/LBOD/src/parse.c -o CMakeFiles/lbodc.dir/src/parse.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/lilly/ProgPort/LBOD/LBOD/src/parse.c -o CMakeFiles/lbodc.dir/src/parse.c.s
 
 CMakeFiles/lbodc.dir/src/compile.c.o: CMakeFiles/lbodc.dir/flags.make
-CMakeFiles/lbodc.dir/src/compile.c.o: /home/lilly/ProgPort/LBOD/src/compile.c
+CMakeFiles/lbodc.dir/src/compile.c.o: /home/lilly/ProgPort/LBOD/LBOD/src/compile.c
 CMakeFiles/lbodc.dir/src/compile.c.o: CMakeFiles/lbodc.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/lilly/ProgPort/LBOD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/lbodc.dir/src/compile.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/lbodc.dir/src/compile.c.o -MF CMakeFiles/lbodc.dir/src/compile.c.o.d -o CMakeFiles/lbodc.dir/src/compile.c.o -c /home/lilly/ProgPort/LBOD/src/compile.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/lilly/ProgPort/LBOD/LBOD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/lbodc.dir/src/compile.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/lbodc.dir/src/compile.c.o -MF CMakeFiles/lbodc.dir/src/compile.c.o.d -o CMakeFiles/lbodc.dir/src/compile.c.o -c /home/lilly/ProgPort/LBOD/LBOD/src/compile.c
 
 CMakeFiles/lbodc.dir/src/compile.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/lbodc.dir/src/compile.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/lilly/ProgPort/LBOD/src/compile.c > CMakeFiles/lbodc.dir/src/compile.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/lilly/ProgPort/LBOD/LBOD/src/compile.c > CMakeFiles/lbodc.dir/src/compile.c.i
 
 CMakeFiles/lbodc.dir/src/compile.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/lbodc.dir/src/compile.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/lilly/ProgPort/LBOD/src/compile.c -o CMakeFiles/lbodc.dir/src/compile.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/lilly/ProgPort/LBOD/LBOD/src/compile.c -o CMakeFiles/lbodc.dir/src/compile.c.s
 
 # Object files for target lbodc
 lbodc_OBJECTS = \
@@ -141,7 +141,7 @@ lbodc: CMakeFiles/lbodc.dir/src/parse.c.o
 lbodc: CMakeFiles/lbodc.dir/src/compile.c.o
 lbodc: CMakeFiles/lbodc.dir/build.make
 lbodc: CMakeFiles/lbodc.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/lilly/ProgPort/LBOD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking C executable lbodc"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/lilly/ProgPort/LBOD/LBOD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking C executable lbodc"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/lbodc.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -153,6 +153,6 @@ CMakeFiles/lbodc.dir/clean:
 .PHONY : CMakeFiles/lbodc.dir/clean
 
 CMakeFiles/lbodc.dir/depend:
-	cd /home/lilly/ProgPort/LBOD/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/lilly/ProgPort/LBOD /home/lilly/ProgPort/LBOD /home/lilly/ProgPort/LBOD/build /home/lilly/ProgPort/LBOD/build /home/lilly/ProgPort/LBOD/build/CMakeFiles/lbodc.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /home/lilly/ProgPort/LBOD/LBOD/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/lilly/ProgPort/LBOD/LBOD /home/lilly/ProgPort/LBOD/LBOD /home/lilly/ProgPort/LBOD/LBOD/build /home/lilly/ProgPort/LBOD/LBOD/build /home/lilly/ProgPort/LBOD/LBOD/build/CMakeFiles/lbodc.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/lbodc.dir/depend
 

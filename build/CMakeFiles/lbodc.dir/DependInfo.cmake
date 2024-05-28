@@ -8,10 +8,10 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/lilly/ProgPort/LBOD/src/compile.c" "CMakeFiles/lbodc.dir/src/compile.c.o" "gcc" "CMakeFiles/lbodc.dir/src/compile.c.o.d"
-  "/home/lilly/ProgPort/LBOD/src/lex.c" "CMakeFiles/lbodc.dir/src/lex.c.o" "gcc" "CMakeFiles/lbodc.dir/src/lex.c.o.d"
-  "/home/lilly/ProgPort/LBOD/src/main.c" "CMakeFiles/lbodc.dir/src/main.c.o" "gcc" "CMakeFiles/lbodc.dir/src/main.c.o.d"
-  "/home/lilly/ProgPort/LBOD/src/parse.c" "CMakeFiles/lbodc.dir/src/parse.c.o" "gcc" "CMakeFiles/lbodc.dir/src/parse.c.o.d"
+  "/home/lilly/ProgPort/LBOD/LBOD/src/compile.c" "CMakeFiles/lbodc.dir/src/compile.c.o" "gcc" "CMakeFiles/lbodc.dir/src/compile.c.o.d"
+  "/home/lilly/ProgPort/LBOD/LBOD/src/lex.c" "CMakeFiles/lbodc.dir/src/lex.c.o" "gcc" "CMakeFiles/lbodc.dir/src/lex.c.o.d"
+  "/home/lilly/ProgPort/LBOD/LBOD/src/main.c" "CMakeFiles/lbodc.dir/src/main.c.o" "gcc" "CMakeFiles/lbodc.dir/src/main.c.o.d"
+  "/home/lilly/ProgPort/LBOD/LBOD/src/parse.c" "CMakeFiles/lbodc.dir/src/parse.c.o" "gcc" "CMakeFiles/lbodc.dir/src/parse.c.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.
