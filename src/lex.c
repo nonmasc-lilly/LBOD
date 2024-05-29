@@ -129,6 +129,8 @@ enum token_type token_from_string(const char *str) {
         MATCH("loop")       return TT_loop;
         MATCH("forever")    return TT_forever;
         MATCH("return")     return TT_return;
+        MATCH("call")       return TT_call;
+        MATCH("match")      return TT_match;
         DEFAULTMATCH() {
             switch(*MATCHSUBJECT) {
             case '$': strtol(MATCHSUBJECT+1, &eptr, 16);           goto check;

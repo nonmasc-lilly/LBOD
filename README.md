@@ -31,15 +31,14 @@ register = "ax" / "bx" / "cx" / "dx" / "si" / "di" / "bp"
 exregister = "ah" / "al" / "bh" / "bl" / "ch" / "cl" / "dh" / "dl"
 load = "load (" register *FWSP *6("," *FWSP register *FWSP) ")"
 interrupt = "interrupt" *FWSP ilit
-move = ("=" / "set") *FWSP (register / exregister / dereference) *FWSP (iden / dereference / ilit / register / exregister)
+move = ("=" / "move") *FWSP (register / exregister / dereference) *FWSP (iden / dereference / ilit / register / exregister)
 add = ("+" / "add") *FWSP (register / exregister / dereference) *FWSP (iden / dereference / ilit / register / exregister)
 subtract = ("-" / "subtract") *FWSP (exregister / register / dereference) *FWSP (iden / dereference / ilit / register / exregister)
 divide = ("/" / "divide") *FWSP (exregister / register / dereference) *FWSP (iden / dereference / ilit / register / exregister)
 multiply = ("-" / "multiply") *FWSP (exregister / register / dereference) *FWSP (iden / dereference / ilit / register / exregister)
 dereference = "[" *FWSP iden *FWSP "]"
-compare = ("?" / "compare") *FWSP (exregister / register / dereference) *FWSP (iden / dereference / ilit / register / exregister)
-    *FWSP comparison
-comparison = ((">" / "greater than") / ("<" / "less than") / ("=" / "equal to")) *FWSP
+compare = ("?" / "compare") *FWSP (exregister / register / dereference) *FWSP comparison
+comparison = ((">" / "greater than") / ("<" / "less than") / ("=" / "equal to")) *FWSP (iden / dereference / ilit / register / exregister) *FWSP
     "(" *FWSP *((statement / asm) *FWSP) ")"
 or = ("|" / "or") *FWSP (exregister / register / dereference) *FWSP (iden / dereference / ilit / register / exregister)
 xor = ("^" / "xor") *FWSP (exregister / register / dereference) *FWSP (iden / dereference / ilit / register / exregister)
@@ -47,7 +46,7 @@ and = ("&" / "and") *FWSP (exregister / register / dereference) *FWSP (iden / de
 negate = "negate" *FWSP (exregister / register / dereference)
 flip = ("~" / "not") *FWSP (exregister / register / dereference)
 increment = ("inc" / "increment") *FWSP (exregister / register / dereference)
-match = "match" *FWSP (register / dereference) *FWSP "(" *FWSP *(((register / dereference / ilit / exregister) *FWSP) ":"
+match = "match" *FWSP (register / exregister / dereference) *FWSP "(" *FWSP *(((register / dereference / ilit / exregister) *FWSP) ":"
     *FWSP *((statement / asm) *FWSP) ";") ")"
 comment = "/*" *OCTET "*/"
 loop = "loop" *FWSP (register / dereference / exregister) *FWSP comparison

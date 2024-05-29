@@ -47,6 +47,7 @@ int main(int argc, const char **argv) {
     char *output, *file_content;
     unsigned int input_files_len, i, file_size;
     struct lex_node *lexed;
+    struct parse_node *parsed;
     bool debug;
     FILE *fp;
     output_file = NULL;
@@ -83,6 +84,8 @@ int main(int argc, const char **argv) {
 
         lexed = lex_string(file_content);
         if(debug) represent_tokens(lexed, 0);
+        parsed = parse_program(lexed);
+        if(debug) represent_parse_node(parsed, 0);
         free(file_content);
     }
     free(output);

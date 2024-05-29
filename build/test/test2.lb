@@ -1,0 +1,119 @@
+PROGRAM "osdev"
+
+asm """
+use16
+org 0x7C00
+jmp _start
+"""
+
+const SECTOR_NUM    : $64
+const LOAD_LOCATION : $7E00 
+
+function _start [0] (
+    = ax $0
+    asm """
+    mov ss, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    mov ds, ax
+    mov sp, 0x7C00
+    """
+    = [BOOT_DISK] dl
+    = ah $2
+    = al SECTOR_NUM
+    = cx $2
+    = dh $0
+    = bx LOAD_LOCATION
+    int $13
+    call LOAD_LOCATION ()
+    = ax $0E30
+    int $10
+    asm """jmp $"""
+)
+
+var bytes BOOT_DISK : $0
+
+asm """
+times 510-($-$$) db 0x00
+dw 0xAA55
+jmp _os_start
+"""
+
+var bytes INTRO : "Welcome to llos. A simple 16 bit OS.", $A, $0
+var bytes LINEOVERFLOW : $A, "InputError: line overflow.", $A, $0
+var bytes SET_COLOR : $2
+const LINEMAX : $100
+
+function _os_start [0] (
+    call _clrscr ()
+    call _puts (INTRO)
+    forever (
+        call _shell ()
+    )
+    return
+)
+
+function _shell [0] (
+    return
+)
+
+function _getc [0] (
+    save (ax)
+    ^ ax ax
+    int $16
+    load (ax)
+    return
+)
+
+function _putc [1] (
+    save (ax)
+    = ah $0E
+    int $10
+    match al (
+        $8 :
+            = al $20
+            int $10
+            = al $8
+            int $10
+        ;
+        $D :
+            = al $A
+            int $10
+        ;
+        $A :
+            = al $D
+            int $10
+        ;
+    )
+    load (ax)
+    return
+)
+
+function _puts [2] (
+    save (ax, si)
+    loop al = $0 (
+        = al [si]
+        call _putc (ax)
+    )
+    load (ax, si)
+)
+
+function _clrscr [0] (
+    save (ax, bx, cx, dx)
+    = ax $0600
+    = bh [SET_COLOR]
+    = cx $0
+    = dx $FFFF
+    int $10
+    load (ax, bx, cx, dx)
+    return
+)
+
+
+END PROGRAM
+
+
+
+
+

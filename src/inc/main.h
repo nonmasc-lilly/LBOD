@@ -38,7 +38,7 @@ static const char *token_type_rep[] = {
     "match",        ";",            "loop",         /*    ;    */
     "forever",      "[",            "]",            /*    [ ]  */
     "than",         "to",           ",",            /*      ,  */
-    "xor",          "return"                        /*  ^      */
+    "xor",          "return",       "call"          /*  ^      */
 };
 
 enum token_type {
@@ -63,7 +63,7 @@ enum token_type {
     TT_match,       TT_semicolon,   TT_loop,
     TT_forever,     TT_obracket,    TT_cbracket,
     TT_than,        TT_to,          TT_comma,
-    TT_xor,         TT_return,
+    TT_xor,         TT_return,      TT_call
 };
 
 enum value_type {
@@ -101,6 +101,22 @@ enum error_level {
     EL_info, EL_warning, EL_error
 };
 
+static const char *parse_class_rep[] = {
+    "program",              "string",       "identifier",
+    "primary statement",    "declaration",  "literal",
+    "int literal",          "type",         "asm",
+    "function",             "statement",    "save",
+    "register",             "exregister",   "load",
+    "interrupt",            "move",         "add",
+    "subtract",             "divide",       "multiply",
+    "dereference",          "compare",      "comparison",
+    "or",                   "xor",          "and",
+    "negate",               "flip",         "increment",
+    "match",                "loop",         "forever",
+    "call",                 "return",       "end",
+    "break",                "continue"
+};
+
 enum parse_class {
     PC_program,             PC_string,      PC_iden,
     PC_primary_statement,   PC_declaration, PC_literal,
@@ -113,7 +129,8 @@ enum parse_class {
     PC_or,                  PC_xor,         PC_and,
     PC_negate,              PC_flip,        PC_increment,
     PC_match,               PC_loop,        PC_forever,
-    PC_call,                PC_return
+    PC_call,                PC_return,      PC_end,
+    PC_break,               PC_continue
 };
 
 struct parse_node {
@@ -136,43 +153,47 @@ enum value_type parse_class_value_type(enum parse_class type);
 struct parse_node *create_parse_node(enum parse_class type, const void *value);
 void destroy_parse_node(struct parse_node *parse_node);
 void parse_node_add_child(struct parse_node *parent, struct parse_node *child);
+void represent_parse_node(struct parse_node *root, unsigned int offset);
 
+/*TODO: Name check and other various state problems lol*/
 
-struct parse_node *parse_string(struct lex_node **current);             /* done */
-struct parse_node *parse_iden(struct lex_node **current);               /* done */
-struct parse_node *parse_int_literal(struct lex_node **current);        /* done */
-struct parse_node *parse_literal(struct lex_node **current);            /* done */
-struct parse_node *parse_dereference(struct lex_node **current);        /* done */
-struct parse_node *parse_type(struct lex_node **current);               /* done */
-struct parse_node *parse_register(struct lex_node **current);           /* done */
-struct parse_node *parse_exregister(struct lex_node **current);         /* done */
-struct parse_node *parse_save(struct lex_node **current);               /*      */
-struct parse_node *parse_load(struct lex_node **current);               /*      */
-struct parse_node *parse_interrupt(struct lex_node **current);          /*      */
-struct parse_node *parse_move(struct lex_node **current);               /*      */
-struct parse_node *parse_add(struct lex_node **current);                /*      */
-struct parse_node *parse_subtract(struct lex_node **current);           /*      */
-struct parse_node *parse_multiply(struct lex_node **current);           /*      */
-struct parse_node *parse_divide(struct lex_node **current);             /*      */
-struct parse_node *parse_or(struct lex_node **current);                 /*      */
-struct parse_node *parse_xor(struct lex_node **current);                /*      */
-struct parse_node *parse_and(struct lex_node **current);                /*      */
-struct parse_node *parse_negate(struct lex_node **current);             /*      */
-struct parse_node *parse_flip(struct lex_node **current);               /*      */
-struct parse_node *parse_increment(struct lex_node **current);          /*      */
-struct parse_node *parse_return(struct lex_node **current);             /*      */
-struct parse_node *parse_call(struct lex_node **current);               /*      */
-struct parse_node *parse_match(struct lex_node **current);              /*      */
-struct parse_node *parse_comparison(struct lex_node **current);         /*      */
-struct parse_node *parse_compare(struct lex_node **current);            /*      */
-struct parse_node *parse_loop(struct lex_node **current);               /*      */
-struct parse_node *parse_forever(struct lex_node **current);            /*      */
-struct parse_node *parse_statement(struct lex_node **current);          /*      */
-struct parse_node *parse_asm(struct lex_node **current);                /* done */
-struct parse_node *parse_function(struct lex_node **current);           /* done */
-struct parse_node *parse_declaration(struct lex_node **current);        /* done */
-struct parse_node *parse_primary_statement(struct lex_node **current);  /* done */
-struct parse_node *parse_program(struct lex_node *tokens);              /* done */
+struct parse_node *parse_string(struct lex_node **current);      /* done {value}                         */
+struct parse_node *parse_iden(struct lex_node **current);        /* done {value}                         */
+struct parse_node *parse_int_literal(struct lex_node **current); /* done {value}                         */
+struct parse_node *parse_literal(struct lex_node **current);     /* done {str / ilit, lit}               */
+struct parse_node *parse_dereference(struct lex_node **current); /* done {iden / register}               */
+struct parse_node *parse_type(struct lex_node **current);        /* done {value}                         */
+struct parse_node *parse_register(struct lex_node **current);    /* done {value}                         */
+struct parse_node *parse_exregister(struct lex_node **current);  /* done {value}                         */
+struct parse_node *parse_save(struct lex_node **current);        /* done {*register}                     */
+struct parse_node *parse_load(struct lex_node **current);        /* done {*register}                     */
+struct parse_node *parse_interrupt(struct lex_node **current);   /* done {ilit}                          */
+struct parse_node *parse_move(struct lex_node **current);        /* done {eb, rb}                        */
+struct parse_node *parse_add(struct lex_node **current);         /* done {eb, rb}                        */
+struct parse_node *parse_subtract(struct lex_node **current);    /* done {eb, rb}                        */
+struct parse_node *parse_multiply(struct lex_node **current);    /* done {eb, rb}                        */
+struct parse_node *parse_divide(struct lex_node **current);      /* done {eb, rb}                        */
+struct parse_node *parse_or(struct lex_node **current);          /* done {eb, rb}                        */
+struct parse_node *parse_xor(struct lex_node **current);         /* done {eb, rb}                        */
+struct parse_node *parse_and(struct lex_node **current);         /* done {eb, rb}                        */
+struct parse_node *parse_negate(struct lex_node **current);      /* done {eb}                            */
+struct parse_node *parse_flip(struct lex_node **current);        /* done {eb}                            */
+struct parse_node *parse_increment(struct lex_node **current);   /* done {eb}                            */
+struct parse_node *parse_return(struct lex_node **current);      /* done {}                              */
+struct parse_node *parse_break(struct lex_node **current);       /* done {}                              */
+struct parse_node *parse_continue(struct lex_node **current);    /* done {}                              */
+struct parse_node *parse_call(struct lex_node **current);        /* done {iden, *rb}                     */
+struct parse_node *parse_match(struct lex_node **current);       /* done {reg/deref, *(eb, *state, end)} */
+struct parse_node *parse_comparison(struct lex_node **current);  /* done {value, reg/deref, *state}      */
+struct parse_node *parse_compare(struct lex_node **current);     /* done {reg/deref, comparison}         */
+struct parse_node *parse_loop(struct lex_node **current);        /* done {reg/deref, comparison}         */
+struct parse_node *parse_forever(struct lex_node **current);     /* done {*state}                        */
+struct parse_node *parse_statement(struct lex_node **current);   /*      */
+struct parse_node *parse_asm(struct lex_node **current);                /* done {value}                  */
+struct parse_node *parse_function(struct lex_node **current);           /* done {iden, ilit, *state}     */
+struct parse_node *parse_declaration(struct lex_node **current);        /* done                          */
+struct parse_node *parse_primary_statement(struct lex_node **current);  /* done <asm / func / decl>      */
+struct parse_node *parse_program(struct lex_node *tokens);              /* done {*primstate}             */
 
 
 

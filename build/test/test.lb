@@ -1,5 +1,5 @@
 
-
+PROGRAM "hello world"
 
 /*
 MSG: db "Hello World!", 0xA, 0xD
@@ -23,3 +23,8 @@ function main [0] (
     loop al = 0 (= al [si] )
     asm """jmp $"""
 )
+
+asm """times 510-($-$$) db 0x0"""
+var words MAGIC : $AA55
+
+END PROGRAM
