@@ -16,6 +16,7 @@
 #define DEFAULTMATCH() else
 #define FINMATCH() }
 
+
 static const char *token_type_rep[] = {
     "null",
     "string",       "iden",         "program",
@@ -148,6 +149,7 @@ struct parse_node {
         exit(0);\
     } while(0)
 #define ASSERT(condition, str, token) if(!(condition)) THROW((str), (token))
+
 void report(enum error_level level, const char *string);
 enum value_type parse_class_value_type(enum parse_class type);
 struct parse_node *create_parse_node(enum parse_class type, const void *value);
@@ -184,21 +186,59 @@ struct parse_node *parse_break(struct lex_node **current);       /* done {}     
 struct parse_node *parse_continue(struct lex_node **current);    /* done {}                              */
 struct parse_node *parse_call(struct lex_node **current);        /* done {iden, *rb}                     */
 struct parse_node *parse_match(struct lex_node **current);       /* done {reg/deref, *(eb, *state, end)} */
-struct parse_node *parse_comparison(struct lex_node **current);  /* done {value, reg/deref, *state}      */
+struct parse_node *parse_comparison(struct lex_node **current);  /* done {value, reg/deref/ilit/ereg, *statebn}*/
 struct parse_node *parse_compare(struct lex_node **current);     /* done {reg/deref, comparison}         */
 struct parse_node *parse_loop(struct lex_node **current);        /* done {reg/deref, comparison}         */
 struct parse_node *parse_forever(struct lex_node **current);     /* done {*state}                        */
 struct parse_node *parse_statement(struct lex_node **current);   /*      */
 struct parse_node *parse_asm(struct lex_node **current);                /* done {value}                  */
 struct parse_node *parse_function(struct lex_node **current);           /* done {iden, ilit, *state}     */
-struct parse_node *parse_declaration(struct lex_node **current);        /* done                          */
+struct parse_node *parse_declaration(struct lex_node **current);        /* done {value, {type,iden,lit}  */
+                                                                        /*    / {iden, lit}              */
 struct parse_node *parse_primary_statement(struct lex_node **current);  /* done <asm / func / decl>      */
 struct parse_node *parse_program(struct lex_node *tokens);              /* done {*primstate}             */
 
+enum state_control_type { SC_get, SC_set, SC_increment, SC_get_current, SC_set_current,
+    SC_get_curl, SC_set_curl };
+enum state_argument { SC_null, SC_forever, SC_loop, SC_comparison };
 
+unsigned int state_control(enum state_control_type cmd, enum state_argument arg, unsigned int var);
 
-
-
+char *compile_string(struct parse_node *root);
+char *compile_iden(struct parse_node *root);
+char *compile_int_literal(struct parse_node *root);
+char *compile_literal(struct parse_node *root);
+char *compile_dereference(struct parse_node *root);
+char *compile_register(struct parse_node *root);
+char *compile_exregister(struct parse_node *root);
+char *compile_save(struct parse_node *root);
+char *compile_load(struct parse_node *root);
+char *compile_interrupt(struct parse_node *root);
+char *compile_move(struct parse_node *root);
+char *compile_add(struct parse_node *root);
+char *compile_subtract(struct parse_node *root);
+char *compile_multiply(struct parse_node *root);
+char *compile_divide(struct parse_node *root);
+char *compile_or(struct parse_node *root);
+char *compile_xor(struct parse_node *root);
+char *compile_and(struct parse_node *root);
+char *compile_negate(struct parse_node *root);
+char *compile_flip(struct parse_node *root);
+char *compile_increment(struct parse_node *root);
+char *compile_return(struct parse_node *root);
+char *compile_break(struct parse_node *root);
+char *compile_continue(struct parse_node *root);
+char *compile_call(struct parse_node *root);
+char *compile_match(struct parse_node *root);
+char *compile_compare(struct parse_node *root);
+char *compile_loop(struct parse_node *root);
+char *compile_forever(struct parse_node *root);
+char *compile_statement(struct parse_node *root);
+char *compile_declaration(struct parse_node *root);
+char *compile_function(struct parse_node *root);
+char *compile_asm(struct parse_node *root);
+char *compile_primary_statement(struct parse_node *root);
+char *compile_program(struct parse_node *root);
 
 
 

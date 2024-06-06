@@ -1,28 +1,19 @@
 
 PROGRAM "hello world"
 
-/*
-MSG: db "Hello World!", 0xA, 0xD
-
-main:
-    mov si, MSG
-    mov ah, 0xE
-.L0:
-    mov al, [si]
-    inc si
-    cmp al, 0
-    jne .L0
-.EL0:
-    jmp $
-*/
-
-var bytes MSG : "Hello World", 10, 13, 0
 function main [0] (
     = si MSG
     = ah $0E
-    loop al = 0 (= al [si] )
+    = al [si]
+    loop al = 0 (
+        int $10
+        inc si
+        = al [si]
+    )
     asm """jmp $"""
 )
+
+var bytes MSG : "Hello World", 10, 13, 0
 
 asm """times 510-($-$$) db 0x0"""
 var words MAGIC : $AA55

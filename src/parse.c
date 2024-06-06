@@ -409,7 +409,20 @@ struct parse_node *parse_multiply(struct lex_node **current) {
     (*current) = (*current)->next;
     ret = create_parse_node(PC_multiply, NULL);
     temp = parse_register(current);
-    if(!temp) temp = parse_exregister(current);
+    if(temp) ASSERT(
+        !strcmp(temp->value.s, "ax") || !strcmp(temp->value.s, "dx"),
+        "Cannot pass ax or dx as arfuments to multiply",
+        *current
+    );
+    if(!temp) {
+        temp = parse_exregister(current);
+        if(temp) ASSERT(
+            !strcmp(temp->value.s, "ah") || !strcmp(temp->value.s, "al") ||
+                !strcmp(temp->value.s, "dh") || !strcmp(temp->value.s, "dl"),
+            "Cannot pass ax or dx as arfuments to multiply",
+            *current
+        );
+    }
     if(!temp) temp = parse_dereference(current);
     ASSERT(
         temp,
@@ -421,8 +434,23 @@ struct parse_node *parse_multiply(struct lex_node **current) {
     temp = parse_iden(current);
     if(!temp) temp = parse_int_literal(current);
     if(!temp) temp = parse_dereference(current);
-    if(!temp) temp =    parse_register(current);
-    if(!temp) temp =  parse_exregister(current);
+    if(!temp) {
+        temp =    parse_register(current);
+        if(temp) ASSERT(
+            !strcmp(temp->value.s, "ax") || !strcmp(temp->value.s, "dx"),
+            "Cannot pass ax or dx as arfuments to multiply",
+            *current
+        );
+    }
+    if(!temp) {
+        temp =  parse_exregister(current);
+        if(temp) ASSERT(
+            !strcmp(temp->value.s, "ah") || !strcmp(temp->value.s, "al") ||
+                !strcmp(temp->value.s, "dh") || !strcmp(temp->value.s, "dl"),
+            "Cannot pass ax or dx as arfuments to multiply",
+            *current
+        );
+    }
     ASSERT(
         temp,
         "Expected register, exregister, dereference, int literal, or identifier in multiply statement.",
@@ -454,7 +482,20 @@ struct parse_node *parse_divide(struct lex_node **current) {
     (*current) = (*current)->next;
     ret = create_parse_node(PC_divide, NULL);
     temp = parse_register(current);
-    if(!temp) temp = parse_exregister(current);
+    if(temp) ASSERT(
+        !strcmp(temp->value.s, "ax") || !strcmp(temp->value.s, "dx"),
+        "Cannot pass ax or dx as arfuments to divide",
+        *current
+    );
+    if(!temp) {
+        temp = parse_exregister(current);
+        if(temp) ASSERT(
+            !strcmp(temp->value.s, "ah") || !strcmp(temp->value.s, "al") ||
+                !strcmp(temp->value.s, "dh") || !strcmp(temp->value.s, "dl"),
+            "Cannot pass ax or dx as arfuments to divide",
+            *current
+        );
+    }
     if(!temp) temp = parse_dereference(current);
     ASSERT(
         temp,
@@ -466,8 +507,23 @@ struct parse_node *parse_divide(struct lex_node **current) {
     temp = parse_iden(current);
     if(!temp) temp = parse_int_literal(current);
     if(!temp) temp = parse_dereference(current);
-    if(!temp) temp =    parse_register(current);
-    if(!temp) temp =  parse_exregister(current);
+    if(!temp) {
+        temp =    parse_register(current);
+        if(temp) ASSERT(
+            !strcmp(temp->value.s, "ax") || !strcmp(temp->value.s, "dx"),
+            "Cannot pass ax or dx as arfuments to divide",
+            *current
+        );
+    }
+    if(!temp) {
+        temp =  parse_exregister(current);
+        if(temp) ASSERT(
+            !strcmp(temp->value.s, "ah") || !strcmp(temp->value.s, "al") ||
+                !strcmp(temp->value.s, "dh") || !strcmp(temp->value.s, "dl"),
+            "Cannot pass ax or dx as arfuments to divide",
+            *current
+        );
+    }
     ASSERT(
         temp,
         "Expected register, exregister, dereference, int literal, or identifier in divide statement.",

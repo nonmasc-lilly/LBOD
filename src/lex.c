@@ -82,8 +82,8 @@ enum token_type token_from_string(const char *str) {
         MATCH("const")      return TT_const;
         MATCH("var")        return TT_var;
         MATCH("bytes")      return TT_bytes;
-        MATCH("words")      return TT_bytes;
-        MATCH("doubles")    return TT_bytes;
+        MATCH("words")      return TT_words;
+        MATCH("doubles")    return TT_doubles;
         MATCH("quads")      return TT_quads;
         MATCH("asm")        return TT_asm;
         MATCH("function")   return TT_function;

@@ -1,1 +1,0 @@
-/usr/bin/cc CMakeFiles/lbodc.dir/src/main.c.o CMakeFiles/lbodc.dir/src/lex.c.o CMakeFiles/lbodc.dir/src/parse.c.o CMakeFiles/lbodc.dir/src/compile.c.o -o lbodc
