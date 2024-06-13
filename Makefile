@@ -18,6 +18,6 @@ test2: all
 
 install: build
 	cp build/lbodc /usr/bin/lbodc
-install_vim:
-	sudo cp -rf "vimfiles/lbodsyn.vim" "$(HOME)/.vim/syntax/lbodsyn.vim"
-	sudo cp -rf "vimfiles/lbodftd.vim" "$(HOME)/.vim/ftdetect/lbodfdt.vim"
+install_vim: vimfiles/*
+	cp -rf "vimfiles/lbodsyn.vim" "$(HOME)/.vim/syntax/lbodsyn.vim"
+	cp -rf "vimfiles/lbodftd.vim" "$(HOME)/.vim/ftdetect/lbodfdt.vim"

@@ -817,11 +817,15 @@ struct parse_node *parse_match(struct lex_node **current) {
         if(!temp) temp = parse_dereference(current);
         if(!temp) temp = parse_exregister(current);
         if(!temp) temp = parse_int_literal(current);
-        ASSERT(
-            temp,
-            "Expected register, exregister, dereference or int literal in match body.",
-            *current
-        );
+        if(!temp) {
+            ASSERT(
+                (*current)->type == TT_default,
+                "Expected register, exregister, dereference, default or int literal in match body.",
+                *current
+            );
+            temp = create_parse_node(PC_default, NULL);
+            (*current) = (*current)->next;
+        }
         t2 = temp->type;
         parse_node_add_child(ret, temp);
         ASSERT(
@@ -995,9 +999,10 @@ struct parse_node *parse_forever(struct lex_node **current) {
         *current
     );
     ret = create_parse_node(PC_forever, NULL);
+    (*current) = (*current)->next;
     while((*current)->type != TT_cparen) {
-        (*current) = (*current)->next;
         temp = parse_statement(current);
+        represent_parse_node(temp, 0);
         ASSERT(
             temp,
             "Unending forever statement.",
@@ -1008,10 +1013,47 @@ struct parse_node *parse_forever(struct lex_node **current) {
     (*current) = (*current)->next;
     return ret;
 }
+
+struct parse_node *parse_label(struct lex_node **current) {
+    struct parse_node *ret, *temp;
+    if((*current)->type != TT_lbl) return NULL;
+    (*current) = (*current)->next;
+    ret = create_parse_node(PC_lbl, NULL);
+    temp = parse_iden(current);
+    ASSERT(
+        temp,
+        "Expected iden after label",
+        *current
+    );
+    parse_node_add_child(ret, temp);
+    ASSERT(
+        (*current)->type == TT_colon,
+        "Expected ':' to end label definition",
+        *current
+    );
+    (*current) = (*current)->next;
+    return ret;
+}
+
+struct parse_node *parse_branch(struct lex_node **current) {
+    struct parse_node *ret, *temp;
+    if((*current)->type != TT_branch) return NULL;
+    (*current) = (*current)->next;
+    ret = create_parse_node(PC_branch, NULL);
+    temp = parse_iden(current);
+    ASSERT(
+        temp,
+        "Expected iden after branch statement",
+        *current
+    );
+    parse_node_add_child(ret, temp);
+    return ret;
+}
+
 struct parse_node *parse_statement(struct lex_node **current) {
     unsigned int i;
     struct parse_node *temp;
-    struct parse_node *(*choice[22])(struct lex_node **) = {
+    struct parse_node *(*choice[24])(struct lex_node **) = {
         parse_save,     parse_load,         parse_interrupt,
         parse_move,     parse_add,          parse_subtract,
         parse_multiply, parse_divide,       parse_or,
@@ -1019,7 +1061,7 @@ struct parse_node *parse_statement(struct lex_node **current) {
         parse_flip,     parse_increment,    parse_return,
         parse_break,    parse_continue,     parse_call,
         parse_match,    parse_compare,      parse_loop,
-        parse_forever
+        parse_forever,  parse_label,        parse_branch
     };
     for(i=0; i<22; i++) if(temp = choice[i](current)) return temp;
     return NULL;
@@ -1040,7 +1082,6 @@ struct parse_node *parse_asm(struct lex_node **current) {
 struct parse_node *parse_function(struct lex_node **current) {
     struct parse_node *ret, *temp;
     if((*current)->type != TT_function) return NULL;
-    printf("Hey!\n");
     ret = create_parse_node(PC_function, NULL);
     (*current) = (*current)->next;
     temp = parse_iden(current);
@@ -1186,13 +1227,11 @@ struct parse_node *parse_program(struct lex_node *tokens) {
     parse_node_add_child(program, parse_string(&current));
 
     while(current->type != TT_end || current->next->type != TT_program) {
-        printf("%s\n", token_type_rep[current->type]);
         temp = parse_primary_statement(&current);
         ASSERT(temp, "Expected primary statement in program clause.", current);
         parse_node_add_child(program, temp);
-        ASSERT(current, "Program clause does not end.", NULL);
+        ASSERT(current->next, "Program clause does not end.", NULL);
     }
-    printf("out\n");
     return program;
 }
 

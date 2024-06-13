@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define VERSION "D.6.18"
+
 enum error_type {
     E_SUCCESS,
     E_USAGE,
@@ -38,7 +40,13 @@ static void help_option() {
     printf("================help================\n");
     printf("| \"-o <file>\": set output file   |\n");
     printf("| \"-h\"       : show this menu    |\n");
+    printf("| \"-d\"       : show debug items  |\n");
     printf("====================================\n");
+    printf("lbodc %s Copyright (C) 2024 Lilly H. St Claire\n", VERSION);
+    printf("This program comes with ABSOLUTELY NO WARRANTY.\n");
+    printf("This is free software and you are welcome to redistribute is\n");
+    printf("under the conditions of the Gnu General Public License 3.0\n");
+    printf("or at your discretion, any later version.\n");
     exit(0);
 }
 
@@ -54,7 +62,6 @@ int main(int argc, const char **argv) {
     input_files = NULL;
     input_files_len = 0;
     debug = false;
-    if(argc < 4) user_error(E_USAGE, argc, argv);
     for(i=1; i<argc; i++) {
         if(argv[i][0] == '-') switch(argv[i][1]) {
         case 'o':
@@ -62,6 +69,7 @@ int main(int argc, const char **argv) {
             output_file = argv[++i];
             break;
         case 'd': debug = true; break;
+        case 'h': help_option(); break;
         } else {
             if(!input_files)
                 input_files = malloc((++input_files_len)*sizeof(const char *));

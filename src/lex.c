@@ -131,6 +131,10 @@ enum token_type token_from_string(const char *str) {
         MATCH("return")     return TT_return;
         MATCH("call")       return TT_call;
         MATCH("match")      return TT_match;
+        MATCH("default")    return TT_default;
+        MATCH("lbl")        return TT_lbl;
+        MATCH("label")      return TT_lbl;
+        MATCH("branch")     return TT_branch;
         DEFAULTMATCH() {
             switch(*MATCHSUBJECT) {
             case '$': strtol(MATCHSUBJECT+1, &eptr, 16);           goto check;
@@ -167,6 +171,7 @@ enum token_type optoken_from_stroff(const char *string, unsigned int *offset) {
     case ']':   return TT_cbracket;
     case ',':   return TT_comma;
     case '^':   return TT_xor;
+    case '@':   return TT_lbl;
     default: return TT_null;
     }
 }

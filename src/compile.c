@@ -152,13 +152,24 @@ char *compile_interrupt(struct parse_node *root) {
 }
 
 char *compile_move(struct parse_node *root) {
-    char *ret, *temp[2];
+    char *ret, *temp[3];
     const char *format;
     if(root->type != PC_move) return NULL;
     format = "mov %s, %s\n";
     temp[0] = compile_register(root->children[0]);
     if(!temp[0]) temp[0] = compile_exregister(root->children[0]);
-    if(!temp[0]) temp[0] = compile_dereference(root->children[0]);
+    if(!temp[0]) {
+        temp[0] = compile_dereference(root->children[0]);
+        if(temp) {
+            temp[2] = temp[0];
+            temp[0] = malloc(strlen(temp[2])+11);
+            if(root->children[0]->value.u < 0xFF)
+                sprintf(temp[0], "byte %s", temp[2]);
+            else
+                sprintf(temp[0], "word %s", temp[2]);
+            free(temp[2]);
+        }
+    }
     temp[1] = compile_register(root->children[1]);
     if(!temp[1]) temp[1] = compile_exregister(root->children[1]);
     if(!temp[1]) temp[1] = compile_dereference(root->children[1]);
@@ -178,7 +189,7 @@ char *compile_add(struct parse_node *root) {
     temp[0] = compile_register(root->children[0]);
     if(!temp[0]) temp[0] = compile_exregister(root->children[0]);
     if(!temp[0]) temp[0] = compile_dereference(root->children[0]);
-    temp[1] = compile_register(root->children[0]);
+    temp[1] = compile_register(root->children[1]);
     if(!temp[1]) temp[1] = compile_exregister(root->children[1]);
     if(!temp[1]) temp[1] = compile_dereference(root->children[1]);
     if(!temp[1]) temp[1] = compile_int_literal(root->children[1]);
@@ -196,7 +207,7 @@ char *compile_subtract(struct parse_node *root) {
     temp[0] = compile_register(root->children[0]);
     if(!temp[0]) temp[0] = compile_exregister(root->children[0]);
     if(!temp[0]) temp[0] = compile_dereference(root->children[0]);
-    temp[1] = compile_register(root->children[0]);
+    temp[1] = compile_register(root->children[1]);
     if(!temp[1]) temp[1] = compile_exregister(root->children[1]);
     if(!temp[1]) temp[1] = compile_dereference(root->children[1]);
     if(!temp[1]) temp[1] = compile_int_literal(root->children[1]);
@@ -221,7 +232,7 @@ char *compile_multiply(struct parse_node *root) {
     temp[0] = compile_register(root->children[0]);
     if(!temp[0]) temp[0] = compile_exregister(root->children[0]);
     if(!temp[0]) temp[0] = compile_dereference(root->children[0]);
-    temp[1] = compile_register(root->children[0]);
+    temp[1] = compile_register(root->children[1]);
     if(!temp[1]) temp[1] = compile_exregister(root->children[1]);
     if(!temp[1]) temp[1] = compile_dereference(root->children[1]);
     if(!temp[1]) temp[1] = compile_int_literal(root->children[1]);
@@ -246,7 +257,7 @@ char *compile_divide(struct parse_node *root) {
     temp[0] = compile_register(root->children[0]);
     if(!temp[0]) temp[0] = compile_exregister(root->children[0]);
     if(!temp[0]) temp[0] = compile_dereference(root->children[0]);
-    temp[1] = compile_register(root->children[0]);
+    temp[1] = compile_register(root->children[1]);
     if(!temp[1]) temp[1] = compile_exregister(root->children[1]);
     if(!temp[1]) temp[1] = compile_dereference(root->children[1]);
     if(!temp[1]) temp[1] = compile_int_literal(root->children[1]);
@@ -264,7 +275,7 @@ char *compile_xor(struct parse_node *root) {
     temp[0] = compile_register(root->children[0]);
     if(!temp[0]) temp[0] = compile_exregister(root->children[0]);
     if(!temp[0]) temp[0] = compile_dereference(root->children[0]);
-    temp[1] = compile_register(root->children[0]);
+    temp[1] = compile_register(root->children[1]);
     if(!temp[1]) temp[1] = compile_exregister(root->children[1]);
     if(!temp[1]) temp[1] = compile_dereference(root->children[1]);
     if(!temp[1]) temp[1] = compile_int_literal(root->children[1]);
@@ -282,7 +293,7 @@ char *compile_or(struct parse_node *root) {
     temp[0] = compile_register(root->children[0]);
     if(!temp[0]) temp[0] = compile_exregister(root->children[0]);
     if(!temp[0]) temp[0] = compile_dereference(root->children[0]);
-    temp[1] = compile_register(root->children[0]);
+    temp[1] = compile_register(root->children[1]);
     if(!temp[1]) temp[1] = compile_exregister(root->children[1]);
     if(!temp[1]) temp[1] = compile_dereference(root->children[1]);
     if(!temp[1]) temp[1] = compile_int_literal(root->children[1]);
@@ -300,7 +311,7 @@ char *compile_and(struct parse_node *root) {
     temp[0] = compile_register(root->children[0]);
     if(!temp[0]) temp[0] = compile_exregister(root->children[0]);
     if(!temp[0]) temp[0] = compile_dereference(root->children[0]);
-    temp[1] = compile_register(root->children[0]);
+    temp[1] = compile_register(root->children[1]);
     if(!temp[1]) temp[1] = compile_exregister(root->children[1]);
     if(!temp[1]) temp[1] = compile_dereference(root->children[1]);
     if(!temp[1]) temp[1] = compile_int_literal(root->children[1]);
@@ -423,35 +434,55 @@ char *compile_match(struct parse_node *root) {
     char *ret, *temp[2];
     char *v1, *v2;
     const char *format;
-    unsigned int i, cn;
+    unsigned int i, cn, cme;
     if(root->type != PC_match) return NULL;
+    cme = state_control(SC_get, SC_comparison, 0);
     v1 = compile_register(root->children[0]);
     if(!v1) v1 = compile_exregister(root->children[0]);
     if(!v1) v1 = compile_dereference(root->children[0]);
     ret = calloc(1,1);
     for(i=1; i<root->children_len; i++) {
-        format = "cmp %s, %s\njnz .M%d\n%s\n.M%d:\n";
+        format = "cmp %s, %s\njnz .M%d\n%s\njmp .EM%d\n.M%d:\n";
         v2 = compile_register(root->children[i]);
         if(!v2) v2 = compile_exregister(root->children[i]);
         if(!v2) v2 = compile_dereference(root->children[i]);
         if(!v2) v2 = compile_int_literal(root->children[i]);
-        temp[0] = calloc(1,1);
-        for(i++; root->children[i]->type!=PC_end; i++) {
-            if(!(temp[1] = compile_statement(root->children[i]))) continue;
-            temp[0] = realloc(temp[0], strlen(temp[0])+strlen(temp[1])+1);
-            strcat(temp[0], temp[1]);
+        if(root->children[i]->type == PC_default) {
+            format = "%s\n%s\n";
+            temp[0] = calloc(1,1);
+            for(i++; root->children[i]->type!=PC_end; i++) {
+                if(!(temp[1] = compile_statement(root->children[i]))) continue;
+                temp[0] = realloc(temp[0], strlen(temp[0])+strlen(temp[1])+1);
+                strcat(temp[0], temp[1]);
+                free(temp[1]);
+            }
+            temp[1] = ret;
+            ret = malloc(strlen(temp[1])+strlen(temp[0])+strlen(format)+1);
+            sprintf(ret, format, temp[1], temp[0]);
             free(temp[1]);
+        } else {
+            temp[0] = calloc(1,1);
+            for(i++; root->children[i]->type!=PC_end; i++) {
+                if(!(temp[1] = compile_statement(root->children[i]))) continue;
+                temp[0] = realloc(temp[0], strlen(temp[0])+strlen(temp[1])+1);
+                strcat(temp[0], temp[1]);
+                free(temp[1]);
+            }
+            temp[1] = temp[0];
+            temp[0] = malloc(strlen(temp[1])+strlen(format)+strlen(v1)+strlen(v2)+31);
+            sprintf(temp[0], format, v1, v2, state_control(SC_get, SC_comparison, 0),
+                temp[1], cme, state_control(SC_get, SC_comparison, 0));
+            state_control(SC_increment, SC_comparison, 0);
+            free(temp[1]);
+            ret = realloc(ret, strlen(ret)+strlen(temp[0])+1);
+            strcat(ret, temp[0]);
+            free(temp[0]);
         }
-        temp[1] = temp[0];
-        temp[0] = malloc(strlen(temp[1])+strlen(format)+strlen(v1)+strlen(v2)+31);
-        sprintf(temp[0], format, v1, v2, state_control(SC_get, SC_comparison, 0),
-            temp[1], state_control(SC_get, SC_comparison, 0));
-        state_control(SC_increment, SC_comparison, 0);
-        free(temp[1]);
-        ret = realloc(ret, strlen(ret)+strlen(temp[0])+1);
-        strcat(ret, temp[0]);
-        free(temp[0]);
     }
+    temp[0] = ret;
+    ret = malloc(strlen(temp[0])+strlen(".EM\n")+11);
+    sprintf(ret, "%s\n.EM%d:\n", temp[0], cme);
+    free(temp[0]);
     return ret;
 }
 
@@ -470,12 +501,13 @@ char *compile_compare(struct parse_node *root) {
     if(!v2) v2 = compile_dereference(root->children[1]->children[0]);
     if(!v2) v2 = compile_int_literal(root->children[1]->children[0]);
     if(!v2) v2 = compile_exregister(root->children[1]->children[0]);
+    if(!v2) v2 = compile_iden(root->children[1]->children[0]);
     IFNCMP(root->children[1]->value.s, "equal")   jt = "nz";
     ELNCMP(root->children[1]->value.s, "greater") jt = "le";
     ELNCMP(root->children[1]->value.s, "less")    jt = "ge";
     ret = calloc(1,1);
     for(i=1; i<root->children[1]->children_len; i++) {
-        if(!(temp = compile_statement(root->children[1]->children[1]))) continue;
+        if(!(temp = compile_statement(root->children[1]->children[i]))) continue;
         ret = realloc(ret, strlen(ret)+strlen(temp)+1);
         strcat(ret,temp);
         free(temp);
@@ -498,7 +530,7 @@ char *compile_loop(struct parse_node *root) {
     char *ret, *temp, *v1, *v2;
     char jt;
     if(root->type != PC_loop) return NULL;
-    format = ".L%d:\n%s\ncmp %s, %s\njn%c .L%d\n.EL%d:\n";
+    format = ".L%d:\ncmp %s, %s\nj%c .EL%d\n%s\njmp .L%d\n.EL%d:\n";
     loop_number = state_control(SC_get, SC_loop, 0);
     last = state_control(SC_get_current, 0, 0);
     state_control(SC_set_current, SC_loop, 0);
@@ -523,7 +555,7 @@ char *compile_loop(struct parse_node *root) {
     }
     temp = ret;
     ret = malloc(strlen(temp)+strlen(format)+strlen(v1)+strlen(v2)+31);
-    sprintf(ret, format, loop_number, temp, v1, v2, jt, loop_number, loop_number);
+    sprintf(ret, format, loop_number, v1, v2, jt, loop_number, temp, loop_number, loop_number);
     state_control(SC_increment, SC_loop, 0);
     state_control(SC_set_curl, 0, last_loop_number);
     state_control(SC_set_current, last, 0);
@@ -560,10 +592,30 @@ char *compile_forever(struct parse_node *root) {
     return ret;
 }
 
+char *compile_label(struct parse_node *root) {
+    char *ret;
+    const char *format;
+    if(root->type != PC_lbl) return NULL;
+    format = "._%s:\n";
+    ret = malloc(strlen(format)+strlen(root->children[0]->value.s)+1);
+    sprintf(ret, format, root->children[0]->value.s);
+    return ret;
+}
+
+char *compile_branch(struct parse_node *root) {
+    char *ret;
+    const char *format;
+    if(root->type != PC_branch) return NULL;
+    format = "jmp ._%s\n";
+    ret = malloc(strlen(format)+strlen(root->children[0]->value.s)+1);
+    sprintf(ret, format, root->children[0]->value.s);
+    return ret;
+}
+
 char *compile_statement(struct parse_node *root) {
     unsigned int i;
     char *ret;
-    char *(*choices[23]) (struct parse_node*) = {
+    char *(*choices[25]) (struct parse_node*) = {
         compile_forever,    compile_loop,
         compile_compare,    compile_match,      compile_call,
         compile_continue,   compile_break,      compile_return,
@@ -571,7 +623,8 @@ char *compile_statement(struct parse_node *root) {
         compile_and,        compile_xor,        compile_or,
         compile_divide,     compile_multiply,   compile_subtract,
         compile_add,        compile_move,       compile_interrupt,
-        compile_save,       compile_load,       compile_asm
+        compile_save,       compile_load,       compile_asm,
+        compile_label,      compile_branch
     };
     for(i=0; i<23; i++) if(ret=choices[i](root)) return ret;
     return NULL;

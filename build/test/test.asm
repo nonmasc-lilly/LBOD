@@ -6,12 +6,13 @@ mov si, MSG
 mov ah, 0xe
 mov al, [si]
 .L0:
+cmp al, 0x0
+jz .EL0
 int 0x10
 inc si
 mov al, [si]
 
-cmp al, 0x0
-jnz .L0
+jmp .L0
 .EL0:
 jmp $
 MSG: db "Hello World", 0xa, 0xd, 0x0
