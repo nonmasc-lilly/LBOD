@@ -915,10 +915,9 @@ struct parse_node *parse_compare(struct lex_node **current) {
     ret = create_parse_node(PC_compare, NULL);
     temp = parse_register(current);
     if(!temp) temp = parse_exregister(current);
-    if(!temp) temp = parse_dereference(current);
     ASSERT(
         temp,
-        "Expected register, exregister, or dereference in compare statement.",
+        "Expected register or exregister in compare statement.",
         *current
     );
     t1 = temp->type;
@@ -956,10 +955,9 @@ struct parse_node *parse_loop(struct lex_node **current) {
     ret = create_parse_node(PC_loop, NULL);
     temp = parse_register(current);
     if(!temp) temp = parse_exregister(current);
-    if(!temp) temp =parse_dereference(current);
     ASSERT(
         temp,
-        "Expected register, exregister, or dereference in loop statement in loop statement.",
+        "Expected register or exregister in loop statement in loop statement.",
         *current
     );
     t1 = temp->type;
