@@ -797,11 +797,10 @@ struct parse_node *parse_match(struct lex_node **current) {
     (*current) = (*current)->next;
     ret = create_parse_node(PC_match, NULL);
     temp = parse_register(current);
-    if(!temp) temp = parse_dereference(current);
     if(!temp) temp = parse_exregister(current);
     ASSERT(
         temp,
-        "Expected register, exregister, or dereference in match statement.",
+        "Expected register or exregister in match statement.",
         *current
     );
     t1 = temp->type;
