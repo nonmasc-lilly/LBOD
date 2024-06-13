@@ -1017,6 +1017,7 @@ struct parse_node *parse_forever(struct lex_node **current) {
 struct parse_node *parse_label(struct lex_node **current) {
     struct parse_node *ret, *temp;
     if((*current)->type != TT_lbl) return NULL;
+    printf("Hey\n");
     (*current) = (*current)->next;
     ret = create_parse_node(PC_lbl, NULL);
     temp = parse_iden(current);
@@ -1050,10 +1051,11 @@ struct parse_node *parse_branch(struct lex_node **current) {
     return ret;
 }
 
+#define STATEMENT_LEN 24
 struct parse_node *parse_statement(struct lex_node **current) {
     unsigned int i;
     struct parse_node *temp;
-    struct parse_node *(*choice[24])(struct lex_node **) = {
+    struct parse_node *(*choice[STATEMENT_LEN])(struct lex_node **) = {
         parse_save,     parse_load,         parse_interrupt,
         parse_move,     parse_add,          parse_subtract,
         parse_multiply, parse_divide,       parse_or,
@@ -1063,7 +1065,7 @@ struct parse_node *parse_statement(struct lex_node **current) {
         parse_match,    parse_compare,      parse_loop,
         parse_forever,  parse_label,        parse_branch
     };
-    for(i=0; i<22; i++) if(temp = choice[i](current)) return temp;
+    for(i=0; i<STATEMENT_LEN; i++) if(temp = choice[i](current)) return temp;
     return NULL;
 }
 struct parse_node *parse_asm(struct lex_node **current) {

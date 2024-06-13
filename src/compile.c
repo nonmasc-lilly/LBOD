@@ -612,10 +612,11 @@ char *compile_branch(struct parse_node *root) {
     return ret;
 }
 
+#define STATEMENT_LEN 25
 char *compile_statement(struct parse_node *root) {
     unsigned int i;
     char *ret;
-    char *(*choices[25]) (struct parse_node*) = {
+    char *(*choices[STATEMENT_LEN]) (struct parse_node*) = {
         compile_forever,    compile_loop,
         compile_compare,    compile_match,      compile_call,
         compile_continue,   compile_break,      compile_return,
@@ -626,7 +627,7 @@ char *compile_statement(struct parse_node *root) {
         compile_save,       compile_load,       compile_asm,
         compile_label,      compile_branch
     };
-    for(i=0; i<23; i++) if(ret=choices[i](root)) return ret;
+    for(i=0; i<STATEMENT_LEN; i++) if(ret=choices[i](root)) return ret;
     return NULL;
 }
 
