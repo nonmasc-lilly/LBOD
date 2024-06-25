@@ -494,6 +494,7 @@ char *compile_compare(struct parse_node *root) {
     if(root->type != PC_compare) return NULL;
     format = "cmp %s, %s\nj%s .EI%d\n%s\n.EI%d:\n";
     loop_number = state_control(SC_get, SC_comparison, 0);
+    state_control(SC_increment, SC_comparison, 0);
     v1 = compile_register(root->children[0]);
     if(!v1) v1 = compile_dereference(root->children[0]);
     if(!v1) v1 = compile_exregister(root->children[0]);
@@ -515,7 +516,6 @@ char *compile_compare(struct parse_node *root) {
     temp = ret;
     ret = malloc(strlen(temp)+strlen(format)+strlen(v1)+strlen(v2)+31);
     sprintf(ret, format, v1, v2, jt, loop_number, temp, loop_number);
-    state_control(SC_increment, SC_comparison, 0);
     free(temp);
     free(v1);
     free(v2);
@@ -536,6 +536,7 @@ char *compile_loop(struct parse_node *root) {
     state_control(SC_set_current, SC_loop, 0);
     last_loop_number = state_control(SC_get_curl, SC_loop, 0);
     state_control(SC_set_curl, SC_loop, loop_number);
+    state_control(SC_increment, SC_loop, 0);
     v1 = compile_register(root->children[0]);
     if(!v1) v1 = compile_dereference(root->children[0]);
     if(!v1) v1 = compile_exregister(root->children[0]);
@@ -556,7 +557,6 @@ char *compile_loop(struct parse_node *root) {
     temp = ret;
     ret = malloc(strlen(temp)+strlen(format)+strlen(v1)+strlen(v2)+31);
     sprintf(ret, format, loop_number, v1, v2, jt, loop_number, temp, loop_number, loop_number);
-    state_control(SC_increment, SC_loop, 0);
     state_control(SC_set_curl, 0, last_loop_number);
     state_control(SC_set_current, last, 0);
     free(temp);

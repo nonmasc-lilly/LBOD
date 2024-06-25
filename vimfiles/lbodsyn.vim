@@ -2,7 +2,7 @@
 syntax keyword lbodmeta PROGRAM END
 syntax keyword lbodkey var const asm function match compare loop forever
 syntax keyword lbodtypes bytes words doubles quads
-syntax keyword lbodstate break continue save load interrupt move add subtract divide multiply compare equal to greater than less or and negate not increment xor return call inc int default branch
+syntax keyword lbodstate break continue save load interrupt move add subtract divide multiply compare equal to greater than less or and negate not increment xor return call inc int default branch label lbl
 syntax keyword lbodreg ax bx cx dx si di bp al ah bl bh cl ch dl dh
 syntax region lbodlabel start=/@/ end=/:/
 

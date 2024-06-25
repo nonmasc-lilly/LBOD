@@ -10,6 +10,14 @@ function main [0] (
         inc si
         = al [si]
     )
+    compare al > 1 (
+        compare al > 2 (
+            loop al > 3 (
+                loop al > 4 (
+                )
+            )
+        )
+    )
     asm """jmp $"""
 )
 
